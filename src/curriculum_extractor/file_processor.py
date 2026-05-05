@@ -48,35 +48,60 @@ class FileProcessor:
             # Parse
             with open(input_path, "r", encoding="utf-8") as f:
                 content = f.read()
-            doc = self.parser.parse(content)
+            doc = self.parser.parse_string(content)
 
             # Filter
-            filtered = self.filter.filter(doc)
+            filtered = self.filter.filter_document(doc)
 
             # Extract metadata
-            metadata = self.metadata_extractor.extract_metadata(filtered)
+            metadata_dict = self.metadata_extractor.extract_from_content(filtered)
+            if not metadata_dict.get("subject") or not metadata_dict.get("grade") or not metadata_dict.get("year"):
+                return ProcessingResult("failed", input_path, errors=["Missing required metadata fields"])
+
+            # Extract essence statement and general outcomes from document
+            essence_statement = ""
+            general_outcomes = []
+            
+            for i, child in enumerate(filtered.children):
+                if hasattr(child, "level") and child.level == 2:
+                    heading_text = "".join(c.content if hasattr(c, "content") else "" for c in child.children).strip()
+                    if "essence" in heading_text.lower():
+                        # Get next paragraph
+                        if i + 1 < len(filtered.children) and hasattr(filtered.children[i + 1], "children"):
+                            essence_statement = "".join(c.content if hasattr(c, "content") else "" for c in filtered.children[i + 1].children).strip()
+                    elif "general" in heading_text.lower() and "outcome" in heading_text.lower():
+                        # Get next list
+                        if i + 1 < len(filtered.children) and hasattr(filtered.children[i + 1], "children"):
+                            for item in filtered.children[i + 1].children:
+                                if hasattr(item, "children"):
+                                    text = "".join(c.content if hasattr(c, "content") else "" for c in item.children).strip()
+                                    if text:
+                                        general_outcomes.append(text)
 
             # Extract strands
             strand_data_list = self.strand_extractor.extract_strands(filtered)
 
-            # Build document
+            # Extract all sub-strands and rubrics from the document
+            all_sub_strands = self.substrand_extractor.extract_substrands(filtered)
+            all_rubrics = self.rubric_extractor.extract_rubrics(filtered)
+
+            # Build document - for now, put all sub-strands and rubrics in first strand
+            # TODO: Properly associate sub-strands and rubrics with their strands
             strands = []
-            for strand_data in strand_data_list:
-                sub_strands = self.substrand_extractor.extract_substrands(strand_data.content)
-                rubrics = self.rubric_extractor.extract_rubrics(strand_data.content)
+            for i, strand_data in enumerate(strand_data_list):
                 strands.append({
                     "strand_id": strand_data.strand_id,
                     "strand_name": strand_data.strand_name,
-                    "sub_strands": [ss.model_dump() for ss in sub_strands],
-                    "assessment_rubric": [r.model_dump() for r in rubrics],
+                    "sub_strands": [ss.model_dump() for ss in all_sub_strands] if i == 0 else [],
+                    "assessment_rubric": [r.model_dump() for r in all_rubrics] if i == 0 else [],
                 })
 
             doc_dict = {
-                "subject": metadata.subject,
-                "grade": metadata.grade,
-                "year": metadata.year,
-                "essence_statement": metadata.essence_statement,
-                "general_learning_outcomes": metadata.general_learning_outcomes,
+                "subject": metadata_dict["subject"],
+                "grade": metadata_dict["grade"],
+                "year": metadata_dict["year"],
+                "essence_statement": essence_statement or "Not specified",
+                "general_learning_outcomes": general_outcomes if general_outcomes else ["Not specified"],
                 "strands": strands,
             }
 

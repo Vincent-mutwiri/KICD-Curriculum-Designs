@@ -1,8 +1,8 @@
-# Grade 5 Mathematics Curriculum
+# Subject: Mathematics
 
-**Subject:** Mathematics  
-**Grade:** 5  
-**Year:** 2024
+# Grade 5
+
+# Year: 2024
 
 ## Essence Statement
 

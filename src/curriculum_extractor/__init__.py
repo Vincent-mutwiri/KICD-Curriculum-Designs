@@ -26,6 +26,7 @@ from curriculum_extractor.parser import (
     MarkdownTable,
 )
 from curriculum_extractor.pretty_printer import PrettyPrinter
+from curriculum_extractor.report_generator import BatchReport, FileReport, ReportGenerator
 from curriculum_extractor.rubric_extractor import RubricExtractor
 from curriculum_extractor.strand_extractor import StrandData, StrandExtractor
 from curriculum_extractor.substrand_extractor import SubStrandData, SubStrandExtractor
@@ -39,7 +40,9 @@ __all__ = [
     "ContentFilter",
     "CurriculumDocument",
     "DataValidator",
+    "BatchReport",
     "FileProcessor",
+    "FileReport",
     "GradeRange",
     "JSONTransformer",
     "MarkdownList",
@@ -49,6 +52,7 @@ __all__ = [
     "MetadataExtractor",
     "PrettyPrinter",
     "ProcessingResult",
+    "ReportGenerator",
     "RubricCriterion",
     "RubricExtractor",
     "Strand",

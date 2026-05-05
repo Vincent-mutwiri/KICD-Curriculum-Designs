@@ -33,6 +33,8 @@ class TestFileProcessor:
         output_file = Path(temp_dir) / "output.json"
         result = processor.process_file(sample_file, str(output_file))
 
+        if result.status != "success":
+            print(f"Errors: {result.errors}")
         assert result.status == "success"
         assert result.files_processed == 1
         assert result.files_succeeded == 1

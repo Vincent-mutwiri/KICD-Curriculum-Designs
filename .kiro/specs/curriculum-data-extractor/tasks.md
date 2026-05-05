@@ -402,7 +402,7 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Handle errors and display user-friendly messages
     - _Requirements: All requirements - CLI is the user interface_
 
-  - [ ]* 20.2 Write integration tests for CLI
+  - [ ] 20.2 Write integration tests for CLI
     - Test CLI with single file input
     - Test CLI with directory input
     - Test CLI with configuration file

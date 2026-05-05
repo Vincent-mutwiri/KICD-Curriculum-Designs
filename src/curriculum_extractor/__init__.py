@@ -6,6 +6,7 @@ and transform them into structured JSON documents suitable for MongoDB storage.
 """
 
 from curriculum_extractor.config import Configuration
+from curriculum_extractor.filter import ContentFilter
 from curriculum_extractor.models import (
     Competency,
     CurriculumDocument,
@@ -22,6 +23,7 @@ __version__ = "0.1.0"
 __all__ = [
     "Competency",
     "Configuration",
+    "ContentFilter",
     "CurriculumDocument",
     "GradeRange",
     "MarkdownList",

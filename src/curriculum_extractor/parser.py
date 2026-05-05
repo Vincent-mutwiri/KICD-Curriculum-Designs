@@ -17,7 +17,7 @@ class MarkdownTable:
 
     headers: list[str]
     rows: list[list[str]]
-    alignments: list[str | None]
+    alignments: list[int | None]
     line_number: int | None = None
 
 

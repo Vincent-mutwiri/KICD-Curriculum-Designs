@@ -111,20 +111,20 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Add logic to conditionally preserve essence statements and general outcomes based on configuration
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9_
 
-  - [ ]* 6.2 Write unit tests for ContentFilter
+  - [ ] 6.2 Write unit tests for ContentFilter
     - Test removal of each extraneous section type
     - Test preservation of strand/sub-strand content
     - Test configuration-based preservation of essence statements
     - Test configuration-based preservation of general outcomes
 
-  - [ ]* 6.3 Write property test for content filtering preservation
+  - [ ] 6.3 Write property test for content filtering preservation
     - **Property 7: Content Filtering Preserves Essential Data**
     - **Validates: Requirements 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7**
     - Generate curriculum documents with both essential and extraneous content
     - Verify that filtering removes only extraneous sections
     - Verify that all strand and sub-strand content is preserved
 
-  - [ ]* 6.4 Write property test for configuration-based preservation
+  - [ ] 6.4 Write property test for configuration-based preservation
     - **Property 8: Configuration-Based Preservation**
     - **Validates: Requirements 3.8, 3.9, 23.1, 23.2**
     - Test with preserve_essence_statement=True and False
@@ -140,26 +140,26 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Handle special characters and multi-word subject names
     - _Requirements: 1.5, 1.6, 1.7, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 18.1, 18.2_
 
-  - [ ]* 7.2 Write unit tests for MetadataExtractor
+  - [ ] 7.2 Write unit tests for MetadataExtractor
     - Test filename parsing with various formats
     - Test content extraction from headers
     - Test subject name normalization with special characters
     - Test grade parsing for single grades and ranges
     - Test alternative grade formats (Gredi, G)
 
-  - [ ]* 7.3 Write property test for metadata extraction completeness
+  - [ ] 7.3 Write property test for metadata extraction completeness
     - **Property 4: Metadata Extraction Completeness**
     - **Validates: Requirements 1.5, 1.6, 1.7, 2.1, 2.2, 2.3**
     - Generate valid curriculum filenames with subject, grade, year
     - Verify that all three metadata fields are extracted correctly
 
-  - [ ]* 7.4 Write property test for grade format normalization
+  - [ ] 7.4 Write property test for grade format normalization
     - **Property 5: Grade Format Normalization**
     - **Validates: Requirements 2.5, 2.6, 18.1, 18.2**
     - Generate various grade format strings
     - Verify correct extraction of numeric values or range objects
 
-  - [ ]* 7.5 Write property test for subject name normalization idempotence
+  - [ ] 7.5 Write property test for subject name normalization idempotence
     - **Property 6: Subject Name Normalization Idempotence**
     - **Validates: Requirements 2.4**
     - Generate random subject names

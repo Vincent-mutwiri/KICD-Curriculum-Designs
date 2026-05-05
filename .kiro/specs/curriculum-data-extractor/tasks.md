@@ -286,27 +286,27 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Handle Unicode characters correctly
     - _Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6, 15.7, 19.1-19.5, 21.1-21.6, 25.1, 25.2_
 
-  - [ ]* 14.2 Write unit tests for JSONTransformer
+  - [ ] 14.2 Write unit tests for JSONTransformer
     - Test transformation of complete curriculum document
     - Test transformation of individual components
     - Test special character escaping
     - Test MongoDB field name compliance
     - Test Unicode character preservation
 
-  - [ ]* 14.3 Write property test for JSON validity
+  - [ ] 14.3 Write property test for JSON validity
     - **Property 15: JSON Validity**
     - **Validates: Requirements 15.1-15.7, 19.1-19.5**
     - Generate random curriculum documents
     - Transform to JSON
     - Verify that output is valid JSON parseable by standard parsers
 
-  - [ ]* 14.4 Write property test for special character preservation
+  - [ ] 14.4 Write property test for special character preservation
     - **Property 16: Special Character Preservation**
     - **Validates: Requirements 21.1-21.6**
     - Generate text with Unicode, special symbols, formatting characters
     - Verify that characters are preserved correctly in JSON output
 
-  - [ ]* 14.5 Write property test for MongoDB field name compliance
+  - [ ] 14.5 Write property test for MongoDB field name compliance
     - **Property 19: MongoDB Field Name Compliance**
     - **Validates: Requirements 25.1-25.4**
     - Generate curriculum documents
@@ -324,7 +324,7 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Validate strand ID uniqueness and sub-strand ID uniqueness within strands
     - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.6, 16.7_
 
-  - [ ]* 15.2 Write unit tests for DataValidator
+  - [ ] 15.2 Write unit tests for DataValidator
     - Test validation of valid documents
     - Test detection of missing required fields
     - Test detection of invalid grade values
@@ -340,7 +340,7 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Ensure valid JSON output
     - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.5_
 
-  - [ ]* 16.2 Write unit tests for PrettyPrinter
+  - [ ] 16.2 Write unit tests for PrettyPrinter
     - Test JSON formatting with various indentation sizes
     - Test file writing
     - Test output validity

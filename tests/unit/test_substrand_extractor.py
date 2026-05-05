@@ -175,3 +175,91 @@ class TestSubStrandExtractor:
         # Should accumulate outcomes and experiences from multiple rows
         assert len(substrands[0].specific_learning_outcomes) >= 2
         assert len(substrands[0].suggested_learning_experiences) >= 2
+
+
+class TestSubStrandStructuredData:
+    """Test structured data parsing for sub-strands."""
+
+    @pytest.fixture
+    def extractor(self):
+        return SubStrandExtractor(MarkdownParser())
+
+    def test_parse_competencies_with_colon_and_dash_formats(self, extractor):
+        """Test competency parsing with colon and dash separators."""
+        text = """
+**Core Competencies to be developed**
+• Critical thinking: solving number problems
+• Communication - discussing strategies
+"""
+
+        competencies = extractor.parse_competencies(text)
+
+        assert [(item.competency, item.context) for item in competencies] == [
+            ("Critical thinking", "solving number problems"),
+            ("Communication", "discussing strategies"),
+        ]
+
+    def test_parse_competencies_with_comma_separated_items(self, extractor):
+        """Test competency parsing with comma-separated name/context pairs."""
+        text = "Creativity: drawing patterns, Collaboration: working in groups"
+
+        competencies = extractor.parse_competencies(text)
+
+        assert [(item.competency, item.context) for item in competencies] == [
+            ("Creativity", "drawing patterns"),
+            ("Collaboration", "working in groups"),
+        ]
+
+    def test_parse_values_with_various_formats(self, extractor):
+        """Test value parsing with numbered items and different separators."""
+        text = """
+Values:
+1. Respect: taking turns
+2. Responsibility - caring for materials
+"""
+
+        values = extractor.parse_values(text)
+
+        assert [(item.value, item.context) for item in values] == [
+            ("Respect", "taking turns"),
+            ("Responsibility", "caring for materials"),
+        ]
+
+    def test_parse_pcis_with_and_without_descriptions(self, extractor):
+        """Test PCI extraction preserves descriptions when present."""
+        text = """
+**Pertinent and Contemporary Issues (PCIs)**
+• Safety: handling tools carefully
+• Life skills
+"""
+
+        assert extractor.parse_pcis(text) == [
+            "Safety: handling tools carefully",
+            "Life skills",
+        ]
+
+    def test_parse_resources_preserves_parenthetical_details(self, extractor):
+        """Test resource extraction preserves parenthetical details."""
+        text = "Suggested Learning Resources: Counters (locally available), charts, pencils"
+
+        assert extractor.parse_resources(text) == [
+            "Counters (locally available)",
+            "charts",
+            "pencils",
+        ]
+
+    def test_parse_assessment_methods(self, extractor):
+        """Test assessment method extraction from comma-separated text."""
+        text = "Assessment Methods: observation, oral questions, written exercises"
+
+        assert extractor.parse_assessment_methods(text) == [
+            "observation",
+            "oral questions",
+            "written exercises",
+        ]
+
+    def test_parse_assessment_methods_ignores_rubric_text(self, extractor):
+        """Test rubric performance levels are not extracted as assessment methods."""
+        text = "Assessment: exceeding expectation, meeting expectation, below expectation"
+
+        assert extractor.parse_assessment_methods(text) == []

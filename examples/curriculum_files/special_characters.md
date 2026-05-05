@@ -1,4 +1,4 @@
-# Kiswahili Darasa la 4 2024
+# Kiswahili Grade 4 2024
 
 ## Essence Statement
 Wanafunzi wajifunze lugha ya Kiswahili kwa njia ya mazungumzo, kusoma, na kuandika. 🇰🇪

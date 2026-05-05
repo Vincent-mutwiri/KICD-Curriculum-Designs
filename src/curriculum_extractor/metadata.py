@@ -2,7 +2,6 @@
 
 import re
 from pathlib import Path
-from typing import Optional
 
 from mistletoe import Document
 
@@ -18,7 +17,7 @@ class MetadataExtractor:
         """Initialize the metadata extractor."""
         pass
 
-    def extract_from_filename(self, filename: str) -> dict[str, Optional[str | int | GradeRange]]:
+    def extract_from_filename(self, filename: str) -> dict[str, str | int | GradeRange | None]:
         """
         Extract metadata from filename patterns.
 
@@ -29,53 +28,74 @@ class MetadataExtractor:
         """
         path = Path(filename)
         stem = path.stem
-        
+
         # First find the year to avoid confusion with grade ranges
         year_match = re.search(rf"[\s_-]({self.YEAR_PATTERN})(?:[\s_-]|$)", stem)
-        
-        if year_match:
-            # Only search for grade before the year
-            stem_before_year = stem[:year_match.start()]
-            grade_match = re.search(r"(?:Grade|Gredi|G)[\s_-]+(\d{1,2}(?:[\s_-]*(?:to|-)[\s_-]*\d{1,2})?)", stem_before_year, re.IGNORECASE)
-            
-            if grade_match:
-                # Extract subject as everything before the grade pattern
-                subject_end = grade_match.start()
-                subject = stem_before_year[:subject_end].rstrip("_- ")
-                
-                return {
-                    "subject": self.normalize_subject(subject),
-                    "grade": self.parse_grade(grade_match.group(0)),
-                    "year": int(year_match.group(1)),
-                }
-        
-        return {"subject": None, "grade": None, "year": None}
+        searchable_stem = stem[: year_match.start()] if year_match else stem
+        grade_match = re.search(
+            r"(?:Grade|Gredi|G)[\s_-]+(\d{1,2}(?:[\s_-]*(?:to|-)[\s_-]*\d{1,2})?)",
+            searchable_stem,
+            re.IGNORECASE,
+        )
 
-    def extract_from_content(self, document: Document) -> dict[str, Optional[str | int | GradeRange]]:
+        if not grade_match:
+            return {"subject": None, "grade": None, "year": None}
+
+        subject = searchable_stem[: grade_match.start()].rstrip("_- ")
+        if not subject:
+            subject = searchable_stem[grade_match.end() :].strip("_- ")
+
+        return {
+            "subject": self.normalize_subject(subject) if subject else None,
+            "grade": self.parse_grade(grade_match.group(0)),
+            "year": int(year_match.group(1)) if year_match else None,
+        }
+
+    def extract_from_content(self, document: Document) -> dict[str, str | int | GradeRange | None]:
         """Extract metadata from document headers."""
         metadata = {"subject": None, "grade": None, "year": None}
-        
+        document_text = self._get_document_text(document)
+
+        revised_year = re.search(rf"\brevised\s+({self.YEAR_PATTERN})\b", document_text, re.IGNORECASE)
+        if revised_year:
+            metadata["year"] = int(revised_year.group(1))
+        else:
+            year_match = re.search(rf"\b({self.YEAR_PATTERN})\b", document_text)
+            if year_match:
+                metadata["year"] = int(year_match.group(1))
+
+        if "grade" in document_text.lower() or "gredi" in document_text.lower():
+            metadata["grade"] = self.parse_grade(document_text)
+
+        subject_match = re.search(
+            r"curriculum\s+design\s+(.+?)\s+(?:grade|gredi)\s+\d+",
+            document_text,
+            re.IGNORECASE,
+        )
+        if subject_match:
+            metadata["subject"] = self.normalize_subject(subject_match.group(1))
+
         for child in document.children:
             if hasattr(child, "level") and child.level == 1:
                 text = self._get_heading_text(child)
-                
+
                 # Look for explicit subject label
                 if "subject" in text.lower():
                     subject_match = re.search(r"subject[:\s]+(.+)", text, re.IGNORECASE)
                     if subject_match:
                         metadata["subject"] = self.normalize_subject(subject_match.group(1))
-                
+
                 # Look for grade
                 if "grade" in text.lower() or "gredi" in text.lower():
                     grade = self.parse_grade(text)
                     if grade:
                         metadata["grade"] = grade
-                
+
                 # Look for year
                 year_match = re.search(rf"\b({self.YEAR_PATTERN})\b", text)
                 if year_match:
                     metadata["year"] = int(year_match.group(1))
-                
+
                 # Extract subject from pattern: "Subject Grade X Year"
                 if not metadata["subject"] and ("grade" in text.lower() or "gredi" in text.lower()):
                     # Find grade pattern
@@ -85,23 +105,23 @@ class MetadataExtractor:
                         subject = text[:grade_match.start()].strip()
                         if subject:
                             metadata["subject"] = self.normalize_subject(subject)
-        
+
         return metadata
 
     def normalize_subject(self, subject: str) -> str:
         """Normalize subject names to consistent format."""
         # Strip whitespace
         normalized = subject.strip()
-        
+
         # Replace multiple spaces with single space
         normalized = re.sub(r"\s+", " ", normalized)
-        
+
         # Title case
         normalized = normalized.title()
-        
+
         return normalized
 
-    def parse_grade(self, grade_str: str) -> Optional[int | GradeRange]:
+    def parse_grade(self, grade_str: str) -> int | GradeRange | None:
         """
         Parse grade from various formats.
 
@@ -122,16 +142,16 @@ class MetadataExtractor:
                     return GradeRange(start=int(numbers[0]), end=int(numbers[1]))
                 except ValueError:
                     return None
-        
+
         # Fallback: Extract numeric parts
         numbers = re.findall(r"\d+", grade_str)
-        
+
         if not numbers:
             return None
-        
+
         if len(numbers) == 1:
             return int(numbers[0])
-        
+
         # Check if it's a valid grade range (both numbers should be 1-12)
         if len(numbers) >= 2:
             # Check if last number looks like a year
@@ -142,20 +162,20 @@ class MetadataExtractor:
                     if 1 <= grade <= 12:
                         return grade
                 return None
-            
+
             # Try to create a range from first two numbers
             first = int(numbers[0])
             second = int(numbers[1])
-            
+
             # Otherwise try to create a range
             try:
                 return GradeRange(start=first, end=second)
             except ValueError:
                 return None
-        
+
         return None
 
-    def _parse_year(self, year_str: str) -> Optional[int]:
+    def _parse_year(self, year_str: str) -> int | None:
         """Parse year from string."""
         match = re.search(rf"\b({self.YEAR_PATTERN})\b", year_str)
         if match:
@@ -169,4 +189,17 @@ class MetadataExtractor:
                 child.content if hasattr(child, "content") else str(child)
                 for child in heading.children
             )
+        return ""
+
+    def _get_document_text(self, document: Document) -> str:
+        """Extract normalized text from a parsed document."""
+        return re.sub(r"\s+", " ", self._extract_node_text(document)).strip()
+
+    def _extract_node_text(self, node) -> str:
+        if hasattr(node, "content"):
+            return str(node.content)
+
+        if hasattr(node, "children") and node.children:
+            return " ".join(self._extract_node_text(child) for child in node.children)
+
         return ""

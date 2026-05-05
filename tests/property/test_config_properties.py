@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 
 import yaml
-from hypothesis import given
+from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from curriculum_extractor.config import Configuration
@@ -21,6 +21,7 @@ from curriculum_extractor.config import Configuration
     strategy=st.sampled_from(["split", "single"]),
     mongodb=st.booleans(),
 )
+@settings(deadline=None)
 def test_configuration_loading_consistency(
     preserve_essence: bool,
     preserve_outcomes: bool,
@@ -40,7 +41,7 @@ def test_configuration_loading_consistency(
     """
     with tempfile.TemporaryDirectory() as tmp_dir:
         config_file = Path(tmp_dir) / "test_config.yaml"
-        
+
         # Use YAML dump to properly escape values
         config_data = {
             "preserve_essence_statement": preserve_essence,

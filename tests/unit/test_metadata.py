@@ -13,7 +13,7 @@ class TestMetadataExtractor:
         """Test filename parsing with underscore separator."""
         extractor = MetadataExtractor()
         result = extractor.extract_from_filename("Mathematics_Grade_10_2024.md")
-        
+
         assert result["subject"] == "Mathematics"
         assert result["grade"] == 10
         assert result["year"] == 2024
@@ -22,7 +22,7 @@ class TestMetadataExtractor:
         """Test filename parsing with space separator."""
         extractor = MetadataExtractor()
         result = extractor.extract_from_filename("English Language Grade 5 2023.md")
-        
+
         assert result["subject"] == "English Language"
         assert result["grade"] == 5
         assert result["year"] == 2023
@@ -31,7 +31,7 @@ class TestMetadataExtractor:
         """Test filename parsing with hyphen separator."""
         extractor = MetadataExtractor()
         result = extractor.extract_from_filename("Science-Grade-7-2022.md")
-        
+
         assert result["subject"] == "Science"
         assert result["grade"] == 7
         assert result["year"] == 2022
@@ -40,16 +40,25 @@ class TestMetadataExtractor:
         """Test filename parsing with multi-word subject names."""
         extractor = MetadataExtractor()
         result = extractor.extract_from_filename("Social Studies_Grade_4_2024.md")
-        
+
         assert result["subject"] == "Social Studies"
         assert result["grade"] == 4
         assert result["year"] == 2024
+
+    def test_extract_from_filename_grade_first_subject(self) -> None:
+        """Test filename parsing when grade appears before the subject."""
+        extractor = MetadataExtractor()
+        result = extractor.extract_from_filename("Grade 4 Science and Technology.md")
+
+        assert result["subject"] == "Science And Technology"
+        assert result["grade"] == 4
+        assert result["year"] is None
 
     def test_extract_from_filename_invalid_format(self) -> None:
         """Test filename parsing with invalid format."""
         extractor = MetadataExtractor()
         result = extractor.extract_from_filename("InvalidFilename.md")
-        
+
         assert result["subject"] is None
         assert result["grade"] is None
         assert result["year"] is None
@@ -59,7 +68,7 @@ class TestMetadataExtractor:
         markdown = "# Subject: Mathematics\n\nContent here"
         doc = Document(markdown)
         extractor = MetadataExtractor()
-        
+
         result = extractor.extract_from_content(doc)
         assert result["subject"] == "Mathematics"
 
@@ -68,7 +77,7 @@ class TestMetadataExtractor:
         markdown = "# Grade 10\n\nContent here"
         doc = Document(markdown)
         extractor = MetadataExtractor()
-        
+
         result = extractor.extract_from_content(doc)
         assert result["grade"] == 10
 
@@ -77,8 +86,27 @@ class TestMetadataExtractor:
         markdown = "# Curriculum 2024\n\nContent here"
         doc = Document(markdown)
         extractor = MetadataExtractor()
-        
+
         result = extractor.extract_from_content(doc)
+        assert result["year"] == 2024
+
+    def test_extract_from_content_real_title_block(self) -> None:
+        """Test title-block metadata used by real KICD files."""
+        markdown = """**PRIMARY SCHOOL EDUCATION CURRICULUM DESIGN SCIENCE AND TECHNOLOGY**
+
+**GRADE 4**
+
+First Published 2017
+
+Revised 2024
+"""
+        doc = Document(markdown)
+        extractor = MetadataExtractor()
+
+        result = extractor.extract_from_content(doc)
+
+        assert result["subject"] == "Science And Technology"
+        assert result["grade"] == 4
         assert result["year"] == 2024
 
     def test_normalize_subject_strips_whitespace(self) -> None:
@@ -125,7 +153,7 @@ class TestMetadataExtractor:
         """Test grade parsing with range using hyphen."""
         extractor = MetadataExtractor()
         result = extractor.parse_grade("Grade 1-3")
-        
+
         assert isinstance(result, GradeRange)
         assert result.start == 1
         assert result.end == 3
@@ -134,7 +162,7 @@ class TestMetadataExtractor:
         """Test grade parsing with range using 'to'."""
         extractor = MetadataExtractor()
         result = extractor.parse_grade("Grade 4 to 6")
-        
+
         assert isinstance(result, GradeRange)
         assert result.start == 4
         assert result.end == 6

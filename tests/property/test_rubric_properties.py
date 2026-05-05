@@ -1,9 +1,12 @@
 """Property-based tests for RubricExtractor."""
 
-from hypothesis import given, strategies as st
+import html
+
+from hypothesis import given
+from hypothesis import strategies as st
 from mistletoe import Document
 
-from curriculum_extractor import RubricExtractor, MarkdownParser
+from curriculum_extractor import MarkdownParser, RubricExtractor
 
 
 @given(
@@ -55,28 +58,28 @@ def test_property_14_rubric_structure_correctness(
     meeting = meeting[:min_len]
     approaching = approaching[:min_len]
     below = below[:min_len]
-    
+
     # Build rubric table
     header = "| Indicator | Exceeds Expectation | Meets Expectation | Approaches Expectation | Below Expectation |"
     separator = "|-----------|---------------------|-------------------|------------------------|-------------------|"
     rows = []
     for i in range(len(indicators)):
         rows.append(f"| {indicators[i]} | {exceeding[i]} | {meeting[i]} | {approaching[i]} | {below[i]} |")
-    
+
     markdown = "\n".join([header, separator] + rows)
     doc = Document(markdown)
-    
+
     parser = MarkdownParser()
     extractor = RubricExtractor(parser)
     rubrics = extractor.extract_rubrics(doc)
-    
+
     # All indicators must be extracted
     assert len(rubrics) == len(indicators)
-    
+
     # Each rubric must have all performance levels
     for i, rubric in enumerate(rubrics):
-        assert rubric.criterion.strip() == indicators[i].strip()
-        assert rubric.exceeding_expectations.strip() == exceeding[i].strip()
-        assert rubric.meeting_expectations.strip() == meeting[i].strip()
-        assert rubric.approaching_expectations.strip() == approaching[i].strip()
-        assert rubric.below_expectations.strip() == below[i].strip()
+        assert rubric.criterion.strip() == html.unescape(indicators[i].strip())
+        assert rubric.exceeding_expectations.strip() == html.unescape(exceeding[i].strip())
+        assert rubric.meeting_expectations.strip() == html.unescape(meeting[i].strip())
+        assert rubric.approaching_expectations.strip() == html.unescape(approaching[i].strip())
+        assert rubric.below_expectations.strip() == html.unescape(below[i].strip())

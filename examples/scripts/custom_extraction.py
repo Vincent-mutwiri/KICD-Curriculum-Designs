@@ -6,10 +6,7 @@ from curriculum_extractor import (
     MarkdownParser,
     MetadataExtractor,
     StrandExtractor,
-    SubStrandExtractor,
-    RubricExtractor,
-    JSONTransformer,
-    CurriculumDocument
+    RubricExtractor
 )
 
 # Read file
@@ -36,13 +33,9 @@ print(f"\nFound {len(strands)} strand(s):")
 for strand in strands:
     print(f"  - {strand.strand_id}: {strand.strand_name}")
 
-# Extract sub-strands from first strand
-if strands:
-    substrand_extractor = SubStrandExtractor(parser)
-    substrands = substrand_extractor.extract_substrands(strands[0].content)
-    print(f"\nFound {len(substrands)} sub-strand(s) in strand 1")
-
 # Extract rubrics
 rubric_extractor = RubricExtractor(parser)
 rubrics = rubric_extractor.extract_rubrics(doc)
 print(f"\nFound {len(rubrics)} rubric criteria")
+for rubric in rubrics:
+    print(f"  - {rubric.criterion}")

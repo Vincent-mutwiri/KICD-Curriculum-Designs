@@ -46,22 +46,33 @@ class FileProcessor:
         """Process a single curriculum file."""
         try:
             # Parse
-            with open(input_path, "r", encoding="utf-8") as f:
+            with open(input_path, encoding="utf-8") as f:
                 content = f.read()
             doc = self.parser.parse_string(content)
 
             # Filter
             filtered = self.filter.filter_document(doc)
 
-            # Extract metadata
-            metadata_dict = self.metadata_extractor.extract_from_content(filtered)
+            # Extract metadata from both original and filtered sources. Real KICD
+            # files often keep title metadata in front matter removed by filters.
+            filename_metadata = self.metadata_extractor.extract_from_filename(input_path)
+            content_metadata = self.metadata_extractor.extract_from_content(doc)
+            filtered_metadata = self.metadata_extractor.extract_from_content(filtered)
+            metadata_dict = {
+                field: (
+                    filename_metadata.get(field)
+                    or content_metadata.get(field)
+                    or filtered_metadata.get(field)
+                )
+                for field in ("subject", "grade", "year")
+            }
             if not metadata_dict.get("subject") or not metadata_dict.get("grade") or not metadata_dict.get("year"):
                 return ProcessingResult("failed", input_path, errors=["Missing required metadata fields"])
 
             # Extract essence statement and general outcomes from document
             essence_statement = ""
             general_outcomes = []
-            
+
             for i, child in enumerate(filtered.children):
                 if hasattr(child, "level") and child.level == 2:
                     heading_text = "".join(c.content if hasattr(c, "content") else "" for c in child.children).strip()

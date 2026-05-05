@@ -1,0 +1,25 @@
+# Example Configuration for Curriculum Data Extractor
+# Copy this file to config.yaml and customize as needed
+
+# Preserve essence statement in output (default: true)
+preserve_essence_statement: true
+
+# Preserve general learning outcomes in output (default: true)
+preserve_general_outcomes: true
+
+# Output directory for JSON files (default: ./output)
+output_directory: "./output"
+
+# Enable pretty-printing of JSON output (default: true)
+pretty_print: true
+
+# Indentation size for pretty-printed JSON (default: 2)
+indent_size: 2
+
+# Strategy for handling grade range files (Grade 1-3)
+# Options: "split" (create separate files for each grade) or "single" (one file with range)
+# Default: "split"
+grade_range_strategy: "split"
+
+# Generate MongoDB-compatible JSON format (default: true)
+mongodb_format: true

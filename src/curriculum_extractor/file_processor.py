@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 from .config import Configuration
 from .filter import ContentFilter
@@ -96,14 +97,20 @@ class FileProcessor:
             all_sub_strands = self.substrand_extractor.extract_substrands(filtered)
             all_rubrics = self.rubric_extractor.extract_rubrics(filtered)
 
-            # Build document - for now, put all sub-strands and rubrics in first strand
-            # TODO: Properly associate sub-strands and rubrics with their strands
             strands = []
-            for i, strand_data in enumerate(strand_data_list):
+            strand_sources = strand_data_list or self._derive_strands_from_substrands(all_sub_strands)
+            for i, strand_data in enumerate(strand_sources):
+                sub_strands = [
+                    self._substrand_to_dict(sub_strand)
+                    for sub_strand in all_sub_strands
+                    if sub_strand.sub_strand_id.split(".", 1)[0]
+                    == self._strand_id_prefix(strand_data.strand_id)
+                ]
+                sub_strands = self._deduplicate_substrands(sub_strands)
                 strands.append({
                     "strand_id": strand_data.strand_id,
                     "strand_name": strand_data.strand_name,
-                    "sub_strands": [ss.model_dump() for ss in all_sub_strands] if i == 0 else [],
+                    "sub_strands": sub_strands,
                     "assessment_rubric": [r.model_dump() for r in all_rubrics] if i == 0 else [],
                 })
 
@@ -169,3 +176,52 @@ class FileProcessor:
     def generate_output_filename(self, input_filename: str) -> str:
         """Generate output filename from input filename."""
         return Path(input_filename).stem + ".json"
+
+    def _derive_strands_from_substrands(self, sub_strands):
+        """Derive minimal strand records when real files store strands in table cells."""
+        from .strand_extractor import StrandData
+
+        strand_ids = sorted({sub.sub_strand_id.split(".", 1)[0] for sub in sub_strands})
+        return [
+            StrandData(
+                strand_id=strand_id,
+                strand_name=f"Strand {strand_id}",
+                content_start_line=None,
+                content_end_line=None,
+            )
+            for strand_id in strand_ids
+        ]
+
+    def _substrand_to_dict(self, sub_strand) -> dict[str, Any]:
+        """Convert extracted SubStrandData into model-compatible dictionaries."""
+        return {
+            "sub_strand_id": sub_strand.sub_strand_id,
+            "sub_strand_name": sub_strand.sub_strand_name,
+            "topics": sub_strand.topics,
+            "specific_learning_outcomes": sub_strand.specific_learning_outcomes,
+            "suggested_learning_experiences": sub_strand.suggested_learning_experiences,
+            "key_inquiry_questions": sub_strand.key_inquiry_questions,
+            "core_competencies": [
+                competency.model_dump() for competency in sub_strand.core_competencies
+            ],
+            "values": [value.model_dump() for value in sub_strand.values],
+            "pcis": sub_strand.pcis,
+            "suggested_resources": sub_strand.suggested_resources,
+            "assessment_methods": sub_strand.assessment_methods,
+        }
+
+    def _strand_id_prefix(self, strand_id: str) -> str:
+        """Normalize strand IDs like 1.0 to the sub-strand prefix 1."""
+        return strand_id.split(".", 1)[0]
+
+    def _deduplicate_substrands(self, sub_strands: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Keep the first occurrence of each sub-strand ID within a strand."""
+        seen = set()
+        unique = []
+        for sub_strand in sub_strands:
+            sub_strand_id = sub_strand["sub_strand_id"]
+            if sub_strand_id in seen:
+                continue
+            seen.add(sub_strand_id)
+            unique.append(sub_strand)
+        return unique

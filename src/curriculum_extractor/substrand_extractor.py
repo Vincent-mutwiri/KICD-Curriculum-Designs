@@ -71,8 +71,10 @@ class SubStrandExtractor:
             return False
 
         headers = [self._get_cell_text(cell).strip().lower() for cell in table.header.children]
-        required = ['sub-strand', 'specific learning', 'suggested learning experience']
-        return all(any(req in h for h in headers) for req in required)
+        has_substrand = any("sub-strand" in h or "sub strand" in h for h in headers)
+        has_outcomes = any("specific learning" in h for h in headers)
+        has_experiences = any("suggested learning experience" in h for h in headers)
+        return has_substrand and has_outcomes and has_experiences
 
     def _extract_table_content(self, table: Table) -> list[SubStrandData]:
         """Extract sub-strands from table."""

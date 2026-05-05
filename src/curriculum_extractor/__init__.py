@@ -7,6 +7,7 @@ and transform them into structured JSON documents suitable for MongoDB storage.
 
 from curriculum_extractor.config import Configuration
 from curriculum_extractor.filter import ContentFilter
+from curriculum_extractor.metadata import MetadataExtractor
 from curriculum_extractor.models import (
     Competency,
     CurriculumDocument,
@@ -16,7 +17,13 @@ from curriculum_extractor.models import (
     SubStrand,
     Value,
 )
-from curriculum_extractor.parser import MarkdownList, MarkdownListItem, MarkdownParser, MarkdownTable
+from curriculum_extractor.parser import (
+    MarkdownList,
+    MarkdownListItem,
+    MarkdownParser,
+    MarkdownTable,
+)
+from curriculum_extractor.strand_extractor import StrandData, StrandExtractor
 
 __version__ = "0.1.0"
 
@@ -30,8 +37,11 @@ __all__ = [
     "MarkdownListItem",
     "MarkdownParser",
     "MarkdownTable",
+    "MetadataExtractor",
     "RubricCriterion",
     "Strand",
+    "StrandData",
+    "StrandExtractor",
     "SubStrand",
     "Value",
 ]

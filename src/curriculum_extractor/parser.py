@@ -3,12 +3,12 @@ Markdown parsing utilities for curriculum source documents.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable
 
 import mistletoe
-from mistletoe.block_token import Document, List, ListItem, Paragraph, Table, TableCell
+from mistletoe.block_token import Document, List, ListItem, Paragraph, Table
 
 
 @dataclass(frozen=True)
@@ -26,7 +26,7 @@ class MarkdownListItem:
     """Extracted markdown list item with nested children preserved."""
 
     text: str
-    children: list["MarkdownList"] = field(default_factory=list)
+    children: list[MarkdownList] = field(default_factory=list)
     line_number: int | None = None
 
 

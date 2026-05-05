@@ -1,5 +1,4 @@
 """Property tests for markdown parser structure preservation."""
-from __future__ import annotations
 
 import string
 from typing import Any
@@ -8,7 +7,6 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from curriculum_extractor.parser import MarkdownList, MarkdownParser
-
 
 cell_text = st.text(
     alphabet=string.ascii_letters + string.digits + " ",

@@ -174,26 +174,26 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Maintain sequential order of strands
     - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
 
-  - [ ]* 8.2 Write unit tests for StrandExtractor
+  - [ ] 8.2 Write unit tests for StrandExtractor
     - Test strand header identification with various formats
     - Test strand ID and name parsing
     - Test sequential order preservation
     - Test handling of strands with no sub-strands
 
-  - [ ]* 8.3 Write property test for element extraction completeness
+  - [ ] 8.3 Write property test for element extraction completeness
     - **Property 9: Element Extraction Completeness**
     - **Validates: Requirements 4.1, 4.2, 4.3, 5.1, 5.2, 5.3**
     - Generate curriculum documents with N strands
     - Verify that exactly N strands are extracted
     - Verify that each strand's M sub-strands are all extracted
 
-  - [ ]* 8.4 Write property test for sequential order preservation
+  - [ ] 8.4 Write property test for sequential order preservation
     - **Property 10: Sequential Order Preservation**
     - **Validates: Requirements 4.4, 5.5**
     - Generate curriculum documents with multiple strands and sub-strands
     - Verify that output order matches input order for both strands and sub-strands
 
-  - [ ]* 8.5 Write property test for empty collection representation
+  - [ ] 8.5 Write property test for empty collection representation
     - **Property 11: Empty Collection Representation**
     - **Validates: Requirements 4.5, 24.1-24.8**
     - Generate strands with no sub-strands

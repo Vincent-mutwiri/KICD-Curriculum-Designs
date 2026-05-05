@@ -355,13 +355,13 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Return ProcessingResult with status, counts, errors, warnings
     - _Requirements: 17.1, 17.2, 17.3, 17.4, 17.5, 17.6_
 
-  - [ ]* 17.2 Write integration tests for FileProcessor
+  - [ ] 17.2 Write integration tests for FileProcessor
     - Test end-to-end processing of sample curriculum files
     - Test batch processing of multiple files
     - Test error recovery (continue on individual file failures)
     - Test output filename generation
 
-  - [ ]* 17.3 Write property test for batch processing independence
+  - [ ] 17.3 Write property test for batch processing independence
     - **Property 18: Batch Processing Independence**
     - **Validates: Requirements 17.1-17.6**
     - Generate multiple curriculum files
@@ -380,13 +380,13 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Calculate aggregate statistics for batch reports
     - _Requirements: 22.1, 22.2, 22.3, 22.4, 22.5, 22.6_
 
-  - [ ]* 19.2 Write unit tests for ReportGenerator
+  - [ ] 19.2 Write unit tests for ReportGenerator
     - Test file report generation
     - Test batch report generation
     - Test report writing
     - Test aggregate statistics calculation
 
-  - [ ]* 19.3 Write property test for processing report accuracy
+  - [ ] 19.3 Write property test for processing report accuracy
     - **Property 20: Processing Report Accuracy**
     - **Validates: Requirements 22.1-22.6**
     - Process curriculum files

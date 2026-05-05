@@ -110,7 +110,20 @@ class MetadataExtractor:
         - "Grade 1-3", "Grade 1 to 3"
         - "10", "1-3"
         """
-        # Extract numeric parts
+        # Look for explicit grade pattern first
+        grade_match = re.search(r"(?:Grade|Gredi|G)\s+(\d+(?:\s*(?:to|-)\s*\d+)?)", grade_str, re.IGNORECASE)
+        if grade_match:
+            grade_part = grade_match.group(1)
+            numbers = re.findall(r"\d+", grade_part)
+            if len(numbers) == 1:
+                return int(numbers[0])
+            elif len(numbers) == 2:
+                try:
+                    return GradeRange(start=int(numbers[0]), end=int(numbers[1]))
+                except ValueError:
+                    return None
+        
+        # Fallback: Extract numeric parts
         numbers = re.findall(r"\d+", grade_str)
         
         if not numbers:
@@ -121,12 +134,18 @@ class MetadataExtractor:
         
         # Check if it's a valid grade range (both numbers should be 1-12)
         if len(numbers) >= 2:
+            # Check if last number looks like a year
+            if int(numbers[-1]) >= 1900:
+                # Use the first valid grade number
+                for num in numbers[:-1]:
+                    grade = int(num)
+                    if 1 <= grade <= 12:
+                        return grade
+                return None
+            
+            # Try to create a range from first two numbers
             first = int(numbers[0])
             second = int(numbers[1])
-            
-            # If second number looks like a year, treat first as single grade
-            if second >= 1900:
-                return first if 1 <= first <= 12 else None
             
             # Otherwise try to create a range
             try:

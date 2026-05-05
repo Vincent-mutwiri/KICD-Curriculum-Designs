@@ -12,7 +12,6 @@ from pydantic import ValidationError
 from .json_transformer import JSONTransformer
 from .models import CurriculumDocument
 
-
 JsonInput = str | bytes | bytearray | Mapping[str, Any]
 
 

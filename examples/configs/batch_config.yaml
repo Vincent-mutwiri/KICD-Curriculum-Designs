@@ -1,0 +1,8 @@
+# Configuration for batch processing
+preserve_essence_statement: true
+preserve_general_outcomes: true
+output_directory: "./output"
+pretty_print: true
+indent_size: 2
+grade_range_strategy: "split"
+mongodb_format: true

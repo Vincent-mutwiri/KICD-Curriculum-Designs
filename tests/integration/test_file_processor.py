@@ -75,11 +75,11 @@ class TestFileProcessor:
         file1 = input_dir / "file1.md"
         file2 = input_dir / "file2.md"
 
-        sample_content = """# Grade 5 Mathematics
+        sample_content = """# Subject: Mathematics
 
-**Subject:** Mathematics  
-**Grade:** 5  
-**Year:** 2024
+# Grade 5
+
+# Year: 2024
 
 ## Essence Statement
 Test content
@@ -128,11 +128,11 @@ Test content
 
         # Valid file
         valid_file = input_dir / "valid.md"
-        valid_file.write_text("""# Grade 5 Mathematics
+        valid_file.write_text("""# Subject: Mathematics
 
-**Subject:** Mathematics  
-**Grade:** 5  
-**Year:** 2024
+# Grade 5
+
+# Year: 2024
 
 ## Essence Statement
 Test
@@ -185,11 +185,11 @@ Test
         input_dir.mkdir()
 
         file1 = input_dir / "file1.md"
-        file1.write_text("""# Grade 5 Mathematics
+        file1.write_text("""# Subject: Mathematics
 
-**Subject:** Mathematics  
-**Grade:** 5  
-**Year:** 2024
+# Grade 5
+
+# Year: 2024
 
 ## Essence Statement
 Test

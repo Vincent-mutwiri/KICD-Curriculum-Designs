@@ -415,15 +415,15 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Generate various error conditions
     - Verify that error messages include error type, file path, and context
 
-- [ ] 21. Implement round-trip verification
-  - [ ] 21.1 Add round-trip verification functionality
+- [x] 21. Implement round-trip verification
+  - [x] 21.1 Add round-trip verification functionality
     - Implement function to parse JSON back to CurriculumDocument
     - Implement comparison function to check equivalence
     - Report specific differences if verification fails
     - Ignore formatting differences (whitespace, indentation)
     - _Requirements: 20.1, 20.2, 20.3, 20.4, 20.5_
 
-  - [ ] 21.2 Write property test for round-trip transformation
+  - [x] 21.2 Write property test for round-trip transformation
     - **Property 1: Round-Trip Transformation Preserves Data**
     - **Validates: Requirements 20.1-20.5**
     - Generate valid curriculum documents

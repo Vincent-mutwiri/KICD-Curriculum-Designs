@@ -73,15 +73,17 @@ class StrandExtractor:
 
     def _is_strand_header(self, text: str) -> bool:
         """Check if text matches strand header pattern."""
-        # Strip markdown bold markers
+        # Strip markdown bold markers and leading page numbers
         text = text.strip().strip("*").strip()
+        text = re.sub(r"^\d+\s+", "", text)  # Remove leading page numbers
         pattern = r"^STRAND\s+\d+(\.\d+)?\s*:?"
         return bool(re.match(pattern, text, re.IGNORECASE))
 
     def _parse_strand_header(self, header: str) -> tuple[str, str]:
         """Parse strand ID and name from header text."""
-        # Strip markdown bold markers
+        # Strip markdown bold markers and leading page numbers
         header = header.strip().strip("*").strip()
+        header = re.sub(r"^\d+\s+", "", header)  # Remove leading page numbers
         # Try with colon first
         match = re.match(
             r"^STRAND\s+(\d+(?:\.\d+)?)\s*:\s*(.+)$", header, re.IGNORECASE

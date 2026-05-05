@@ -23,7 +23,9 @@ from curriculum_extractor.parser import (
     MarkdownParser,
     MarkdownTable,
 )
+from curriculum_extractor.rubric_extractor import RubricExtractor
 from curriculum_extractor.strand_extractor import StrandData, StrandExtractor
+from curriculum_extractor.substrand_extractor import SubStrandData, SubStrandExtractor
 
 __version__ = "0.1.0"
 
@@ -39,9 +41,12 @@ __all__ = [
     "MarkdownTable",
     "MetadataExtractor",
     "RubricCriterion",
+    "RubricExtractor",
     "Strand",
     "StrandData",
     "StrandExtractor",
     "SubStrand",
+    "SubStrandData",
+    "SubStrandExtractor",
     "Value",
 ]

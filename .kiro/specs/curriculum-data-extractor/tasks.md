@@ -215,14 +215,14 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Extract sub-strand ID, name, and topics
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.4, 6.5, 7.1, 7.2, 7.3, 7.4, 7.5, 8.1, 8.2, 8.3, 8.4_
 
-  - [ ]* 10.2 Write unit tests for SubStrandExtractor
+  - [ ] 10.2 Write unit tests for SubStrandExtractor
     - Test sub-strand table identification
     - Test extraction of each field type
     - Test multi-row sub-strand handling
     - Test nested list parsing in cells
     - Test removal of formatting markers (bullets, numbering)
 
-  - [ ]* 10.3 Write property test for list element extraction
+  - [ ] 10.3 Write property test for list element extraction
     - **Property 12: List Element Extraction Preserves Content**
     - **Validates: Requirements 6.1-6.5, 7.1-7.5, 8.1-8.4, 11.1-11.4, 12.1-12.4, 13.1-13.4**
     - Generate lists with various formatting (bullets, numbers, bold, italic)
@@ -239,14 +239,14 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Parse "Name: Context" and "Name - Context" patterns
     - _Requirements: 9.1-9.6, 10.1-10.6, 11.1-11.4, 12.1-12.4, 13.1-13.4_
 
-  - [ ]* 11.2 Write unit tests for structured data extraction
+  - [ ] 11.2 Write unit tests for structured data extraction
     - Test competency parsing with various formats
     - Test value parsing with various formats
     - Test PCI extraction with and without descriptions
     - Test resource extraction with parenthetical details
     - Test assessment method extraction
 
-  - [ ]* 11.3 Write property test for structured data extraction correctness
+  - [ ] 11.3 Write property test for structured data extraction correctness
     - **Property 13: Structured Data Extraction Correctness**
     - **Validates: Requirements 9.1-9.6, 10.1-10.6**
     - Generate competencies and values with "Name: Context" format
@@ -261,13 +261,13 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Handle split rubrics across pages
     - _Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.6_
 
-  - [ ]* 12.2 Write unit tests for RubricExtractor
+  - [ ] 12.2 Write unit tests for RubricExtractor
     - Test rubric table identification
     - Test extraction of performance levels
     - Test extraction of indicators and descriptions
     - Test handling of split rubrics
 
-  - [ ]* 12.3 Write property test for rubric structure correctness
+  - [ ] 12.3 Write property test for rubric structure correctness
     - **Property 14: Rubric Structure Correctness**
     - **Validates: Requirements 14.1-14.6**
     - Generate rubric tables with indicators and performance levels

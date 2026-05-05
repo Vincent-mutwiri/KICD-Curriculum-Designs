@@ -171,3 +171,35 @@ Content for strand 2
         assert strands[0].content_start_line is not None
         assert strands[0].content_end_line == strands[1].content_start_line
         assert strands[1].content_end_line is None
+
+    def test_extract_strands_with_page_numbers(self):
+        """Test extraction handles leading page numbers in text."""
+        markdown = """
+Some content
+
+4   **STRAND 1.0: NUMBERS**
+
+Content for strand 1
+
+14  **STRAND 2.0 MEASUREMENT**
+
+Content for strand 2
+"""
+        parser = MarkdownParser()
+        document = parser.parse_string(markdown)
+        extractor = StrandExtractor(parser)
+
+        strands = extractor.extract_strands(document)
+
+        assert len(strands) == 2
+        assert strands[0].strand_id == "1.0"
+        assert strands[0].strand_name == "NUMBERS"
+        assert strands[1].strand_id == "2.0"
+        assert strands[1].strand_name == "MEASUREMENT"
+
+    def test_parse_strand_without_colon(self):
+        """Test parsing strand header without colon separator."""
+        extractor = StrandExtractor()
+        strand_id, name = extractor._parse_strand_header("STRAND 2.0 MEASUREMENT")
+        assert strand_id == "2.0"
+        assert name == "MEASUREMENT"

@@ -58,13 +58,13 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Add validation for configuration values
     - _Requirements: 23.1, 23.2, 23.3, 23.4, 23.5, 23.6, 23.7_
 
-  - [ ]* 3.2 Write unit tests for Configuration Manager
+  - [ ] 3.2 Write unit tests for Configuration Manager
     - Test loading from file
     - Test default values
     - Test invalid configuration values
     - Test missing configuration file handling
 
-  - [ ]* 3.3 Write property test for configuration loading consistency
+  - [ ] 3.3 Write property test for configuration loading consistency
     - **Property 22: Configuration Loading Consistency**
     - **Validates: Requirements 23.3, 23.4, 23.5, 23.6, 23.7**
     - Verify that loading the same configuration file multiple times produces identical Configuration objects
@@ -78,14 +78,14 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Handle UTF-8 encoding and encoding errors gracefully
     - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-  - [ ]* 4.2 Write unit tests for MarkdownParser
+  - [ ] 4.2 Write unit tests for MarkdownParser
     - Test parsing valid markdown files
     - Test table extraction with various table structures
     - Test nested list extraction
     - Test encoding error handling
     - Test malformed markdown handling
 
-  - [ ]* 4.3 Write property test for table structure preservation
+  - [ ] 4.3 Write property test for table structure preservation
     - **Property 2: Table Structure Preservation**
     - **Validates: Requirements 1.2, 14.1, 14.2, 14.3, 14.4, 14.5**
     - Generate random markdown tables with Hypothesis

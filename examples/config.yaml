@@ -1,0 +1,24 @@
+# Example Configuration for Curriculum Extractor
+
+# Preserve essence statement in output
+preserve_essence_statement: true
+
+# Preserve general learning outcomes in output
+preserve_general_outcomes: true
+
+# Output directory for generated JSON files
+output_directory: "./output"
+
+# Pretty print JSON output
+pretty_print: true
+
+# Indentation size for JSON output (0-8)
+indent_size: 2
+
+# Strategy for handling grade ranges: "split" or "single"
+# - "split": Create separate documents for each grade in a range
+# - "single": Keep grade ranges as single documents
+grade_range_strategy: "split"
+
+# Format output for MongoDB compatibility
+mongodb_format: true

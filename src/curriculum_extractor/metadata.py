@@ -59,7 +59,7 @@ class MetadataExtractor:
             if hasattr(child, "level") and child.level == 1:
                 text = self._get_heading_text(child)
                 
-                # Look for subject
+                # Look for explicit subject label
                 if "subject" in text.lower():
                     subject_match = re.search(r"subject[:\s]+(.+)", text, re.IGNORECASE)
                     if subject_match:
@@ -75,6 +75,16 @@ class MetadataExtractor:
                 year_match = re.search(rf"\b({self.YEAR_PATTERN})\b", text)
                 if year_match:
                     metadata["year"] = int(year_match.group(1))
+                
+                # Extract subject from pattern: "Subject Grade X Year"
+                if not metadata["subject"] and ("grade" in text.lower() or "gredi" in text.lower()):
+                    # Find grade pattern
+                    grade_match = re.search(r"(?:Grade|Gredi|G)\s+\d+", text, re.IGNORECASE)
+                    if grade_match:
+                        # Subject is everything before the grade pattern
+                        subject = text[:grade_match.start()].strip()
+                        if subject:
+                            metadata["subject"] = self.normalize_subject(subject)
         
         return metadata
 

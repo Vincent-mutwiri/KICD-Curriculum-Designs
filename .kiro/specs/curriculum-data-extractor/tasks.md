@@ -423,7 +423,7 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Ignore formatting differences (whitespace, indentation)
     - _Requirements: 20.1, 20.2, 20.3, 20.4, 20.5_
 
-  - [ ]* 21.2 Write property test for round-trip transformation
+  - [ ] 21.2 Write property test for round-trip transformation
     - **Property 1: Round-Trip Transformation Preserves Data**
     - **Validates: Requirements 20.1-20.5**
     - Generate valid curriculum documents
@@ -438,7 +438,7 @@ This implementation plan breaks down the development of the Curriculum Data Extr
     - Verify document size limits (16MB)
     - _Requirements: 25.1, 25.2, 25.3, 25.4, 25.5, 25.6_
 
-  - [ ]* 22.2 Write unit tests for MongoDB import support
+  - [ ] 22.2 Write unit tests for MongoDB import support
     - Test import script generation
     - Test extended JSON format
     - Test document size validation

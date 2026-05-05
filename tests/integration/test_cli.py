@@ -10,7 +10,7 @@ import pytest
 @pytest.fixture
 def sample_markdown(tmp_path):
     """Create a sample markdown file."""
-    content = """# Mathematics Grade 3 - 2024
+    content = """# Mathematics Grade 3 2024
 
 ## Essence Statement
 Learn basic mathematics concepts.
@@ -19,7 +19,7 @@ Learn basic mathematics concepts.
 - Count numbers
 - Add and subtract
 
-## 1.0 NUMBERS
+## STRAND 1: NUMBERS
 
 ### 1.1 Whole Numbers
 
@@ -110,9 +110,9 @@ class TestCLI:
 
         for i in range(2):
             md_file = input_dir / f"test{i}.md"
-            md_file.write_text(f"""# Subject{i} Grade {i+1} - 2024
+            md_file.write_text(f"""# Subject{i} Grade {i+1} 2024
 
-## 1.0 STRAND
+## STRAND 1: TEST STRAND
 
 ### 1.1 Sub-strand
 
@@ -212,7 +212,7 @@ class TestCLI:
         result = run_cli(str(sample_markdown), "-c", "nonexistent.yaml")
 
         assert result.returncode == 1
-        assert "Error loading config" in result.stdout
+        assert "Error loading config" in result.stderr
 
     def test_cli_help_message(self):
         """Test CLI help message."""

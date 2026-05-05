@@ -19,6 +19,7 @@ from curriculum_extractor.models import (
     SubStrand,
     Value,
 )
+from curriculum_extractor.mongodb_import import MongoDBImporter
 from curriculum_extractor.parser import (
     MarkdownList,
     MarkdownListItem,
@@ -27,6 +28,13 @@ from curriculum_extractor.parser import (
 )
 from curriculum_extractor.pretty_printer import PrettyPrinter
 from curriculum_extractor.report_generator import BatchReport, FileReport, ReportGenerator
+from curriculum_extractor.roundtrip import (
+    RoundTripResult,
+    RoundTripVerifier,
+    compare_curriculum_documents,
+    parse_json_to_curriculum,
+    verify_round_trip,
+)
 from curriculum_extractor.rubric_extractor import RubricExtractor
 from curriculum_extractor.strand_extractor import StrandData, StrandExtractor
 from curriculum_extractor.substrand_extractor import SubStrandData, SubStrandExtractor
@@ -50,11 +58,14 @@ __all__ = [
     "MarkdownParser",
     "MarkdownTable",
     "MetadataExtractor",
+    "MongoDBImporter",
     "PrettyPrinter",
     "ProcessingResult",
     "ReportGenerator",
     "RubricCriterion",
     "RubricExtractor",
+    "RoundTripResult",
+    "RoundTripVerifier",
     "Strand",
     "StrandData",
     "StrandExtractor",
@@ -63,4 +74,7 @@ __all__ = [
     "SubStrandExtractor",
     "ValidationResult",
     "Value",
+    "compare_curriculum_documents",
+    "parse_json_to_curriculum",
+    "verify_round_trip",
 ]
